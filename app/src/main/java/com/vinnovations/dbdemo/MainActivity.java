@@ -3,9 +3,12 @@ package com.vinnovations.dbdemo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.vinnovations.dbdemo.data.MyDbHandler;
 import com.vinnovations.dbdemo.model.Contact;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +28,14 @@ public class MainActivity extends AppCompatActivity {
         db.addContact(c1);
         db.addContact(c2);
 
-        
+        List<Contact> allContacts = db.getAllContacts();
+        for(Contact contact: allContacts) {
+            Log.d("dbharry", "\nId: " + contact.getId() + "\n" +
+                    "Name: " + contact.getName() + "\n" +
+                    "Phone Number: " + contact.getPhoneNumber() + "\n");
+
+        }
+
 
     }
 }

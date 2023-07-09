@@ -2,6 +2,7 @@ package com.vinnovations.dbdemo.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -9,6 +10,9 @@ import androidx.annotation.Nullable;
 
 import com.vinnovations.dbdemo.model.Contact;
 import com.vinnovations.dbdemo.params.Params;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyDbHandler extends SQLiteOpenHelper {
 
@@ -51,4 +55,26 @@ public class MyDbHandler extends SQLiteOpenHelper {
         long newRowId = db.insert(Params.TABLE_NAME, null, values);
         db.close();
     }
+
+    public List<Contact> getAllContacts(){
+        List<Contact> contactList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Generate the query to read from the database
+        String select = "SELECT * FROM " + Params.TABLE_NAME;
+        Cursor cursor = db.rawQuery(select, null);
+
+        //Loop through now
+        if(cursor.moveToFirst()){
+            do{
+                Contact contact = new Contact();
+                contact.setId(Integer.parseInt(cursor.getString(0)));
+                contact.setName(cursor.getString(1));
+                contact.setPhoneNumber(cursor.getString(2));
+                contactList.add(contact);
+            }while(cursor.moveToNext());
+        }
+        return contactList;
+    }
+
 }
