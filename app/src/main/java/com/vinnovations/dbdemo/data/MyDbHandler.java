@@ -68,13 +68,30 @@ public class MyDbHandler extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 Contact contact = new Contact();
-                contact.setId(Integer.parseInt(cursor.getString(0)));
+                contact.setId(Integer.parseInt(cursor.getString(0)));  // in kotlin Integer.valueOf
                 contact.setName(cursor.getString(1));
                 contact.setPhoneNumber(cursor.getString(2));
                 contactList.add(contact);
             }while(cursor.moveToNext());
         }
+        db.close();
         return contactList;
+
     }
+
+    public int updateContact(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Params.KEY_NAME, contact.getName());
+        values.put(Params.KEY_PHONE, contact.getPhoneNumber());
+
+        //Lets update now
+        return db.update(Params.TABLE_NAME, values, Params.KEY_ID + "=?",
+                new String[]{String.valueOf(contact.getId())});
+
+    }
+
+  
 
 }
